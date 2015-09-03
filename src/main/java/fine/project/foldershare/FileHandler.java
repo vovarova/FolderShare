@@ -18,7 +18,16 @@ public class FileHandler implements HttpHandler {
 
 	public void handle(String path, HttpServletRequest req,
 			HttpServletResponse resp) {
+
 		File requstedFile = new File(path);
+		if(!FileFilter.needToProcess(requstedFile)){
+			try {
+				resp.sendError(404, "Not found");
+			} catch (IOException e) {
+				LOGGER.error("Error whole executin "+requstedFile.getName());
+			}
+			return;
+		}
 		try {
 			FileInputStream fileInputStream = new FileInputStream(requstedFile);
 			String mimeType = Files.probeContentType(Paths.get(path));

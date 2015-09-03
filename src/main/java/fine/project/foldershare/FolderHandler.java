@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,11 +46,12 @@ public class FolderHandler implements HttpHandler {
 	private String generateLinks(HttpServletRequest request, File directory)
 			throws MalformedURLException {
 		StringBuilder generatedLinks = new StringBuilder();
-		File[] listFiles = directory.listFiles();
+		List<File> listFiles = FileFilter.filter(Arrays.asList(directory.listFiles()));
+
 		generatedLinks.append("<ul>");
 		generatedLinks.append("<li><a href=\"../\">../</a></li>\n");
 
-		if (listFiles != null && listFiles.length != 0)
+		if (listFiles != null && listFiles.size() != 0)
 			for (File file : listFiles) {
 				String name = file.getName();
 
